@@ -1,0 +1,41 @@
+<nb-card>
+    <nb-card-header>
+      Upload File
+    </nb-card-header>
+  
+    <nb-card-body>
+        <div class="container">
+            <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
+           
+            
+          </div>
+    </nb-card-body>
+  </nb-card>
+
+  <nb-card>
+    <nb-card-header>Select</nb-card-header>
+    <nb-card-body>
+
+      <br> 
+ 
+      <nb-select [(selected)]="selected">
+        <nb-option *ngFor="let o of listUsers" [value]="o">
+          {{ o.name }}
+        </nb-option>
+      </nb-select>
+
+
+
+      <br>
+      <button nbButton
+          fullWidth
+          status="primary"
+          size="large"
+          (click)="uploader.uploadAll()" 
+              [disabled]="!uploader.getNotUploadedItems().length" 
+          >
+          Upload
+  </button>
+  
+    </nb-card-body>
+  </nb-card>
