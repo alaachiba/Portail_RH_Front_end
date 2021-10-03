@@ -1,0 +1,76 @@
+<nb-card>
+    <nb-card-header>
+      Upload File
+    </nb-card-header>
+  
+    <nb-card-body>
+        <div class="container">
+            <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
+           
+            
+          </div>
+    </nb-card-body>
+  </nb-card>
+  
+  <div *ngIf="currentFile" class="progress">
+    <div
+      class="progress-bar progress-bar-info progress-bar-striped"
+      role="progressbar"
+      attr.aria-valuenow="{{ progress }}"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [ngStyle]="{ width: progress + '%' }"
+    >
+      {{ progress }}%
+    </div>
+  </div>
+  <form enctype="multipart/form-data">
+  <label class="btn btn-default">
+    <input type="file" (change)="selectFile($event)" />
+  </label>
+
+  <button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">
+    Upload
+  </button>
+</form>
+  <div class="alert alert-light" role="alert">{{ message }}</div>
+  
+  <div class="card">
+    <div class="card-header">List of Files</div>
+    <ul
+      class="list-group list-group-flush"
+      *ngFor="let file of fileInfos | async"
+    >
+      <li class="list-group-item">
+        <a href="{{ file.url }}">{{ file.name }}</a>
+      </li>
+    </ul>
+  </div>
+
+  <nb-card>
+    <nb-card-header>Select</nb-card-header>
+    <nb-card-body>
+
+      <br> 
+ 
+      <nb-select [(selected)]="selected">
+        <nb-option *ngFor="let o of listUsers" [value]="o">
+          {{ o.name }}
+        </nb-option>
+      </nb-select>
+
+
+
+      <br>
+      <button nbButton
+          fullWidth
+          status="primary"
+          size="large"
+          (click)="uploader.uploadAll()" 
+              [disabled]="!uploader.getNotUploadedItems().length" 
+          >
+          Upload
+  </button>
+  
+    </nb-card-body>
+  </nb-card>
