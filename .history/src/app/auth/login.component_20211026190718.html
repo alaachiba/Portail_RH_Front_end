@@ -1,0 +1,95 @@
+<h1 id="title" class="title"><img [src]="imageSrc" width='300px' /></h1>
+<h1 id="title" class="title">Welcome to SmartUp HR Web</h1>
+
+
+<nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
+  <p class="alert-title"><b>Erreur</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+  </ul>
+</nb-alert>
+
+<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="primary" role="alert">
+  <p class="alert-title"><b>Bienvenue</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+  </ul>
+</nb-alert>
+
+<form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
+
+  <div class="form-control-group">
+    <label class="label" for="input-email">Adresse e-mail :</label>
+ 
+    <input nbInput
+           fullWidth
+           [(ngModel)]="user.username"
+           #username="ngModel"
+           name="username"
+           id="username"
+           pattern=".+@.+\..+"
+           placeholder="Adresse e-mail"
+           fieldSize="large"
+           autofocus
+           [status]="username.dirty ? (username.invalid  ? 'danger' : 'primary') : 'primary'"
+           [required]="getConfigValue('forms.validation.username.required')"
+           [attr.aria-invalid]="username.invalid && username.touched ? true : null">
+           <ng-container *ngIf="username.invalid && username.touched">
+            <p class="error-message" *ngIf="username.errors?.required">
+              E-mail obligatoire
+            </p>
+            <p class="caption status-danger" *ngIf="username.errors?.pattern">
+              Veuillez remplir une adresse e-mail valide
+            </p>
+          
+          </ng-container>
+
+  </div>
+
+  <div class="form-control-group">
+    <span class="label-with-link">
+      <label class="label" for="input-password">Mot de passe :</label>
+      <a class="forgot-password caption-2" routerLink="../request-password">Forgot Password?</a>
+    </span>
+    <input nbInput
+           fullWidth
+           [(ngModel)]="user.pwd"
+           #pwd="ngModel"
+           name="password"
+           type="password"
+           id="input-password"
+           placeholder="password"
+           fieldSize="large"
+           [status]="pwd.dirty ? (pwd.invalid  ? 'danger' : 'primary') : 'primary'"
+           [required]="getConfigValue('forms.validation.pwd.required')"
+           [minlength]="getConfigValue('forms.validation.pwd.minLength')"
+           [maxlength]="getConfigValue('forms.validation.pwd.maxLength')"
+           [attr.aria-invalid]="pwd.invalid && pwd.touched ? true : null">
+    <ng-container *ngIf="pwd.invalid && pwd.touched ">
+      <p class="caption status-danger" *ngIf="pwd.errors?.required">
+        Password is required!
+      </p>
+      <p class="caption status-danger" *ngIf="pwd.errors?.minlength || pwd.errors?.maxlength">
+        Password should contain
+        from {{ getConfigValue('forms.validation.pwd.minLength') }}
+        to {{ getConfigValue('forms.validation.pwd.maxLength') }}
+        characters
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group accept-group">
+    <nb-checkbox name="rememberMe"  [(ngModel)]="user.rememberMe" *ngIf="rememberMe">Remember me</nb-checkbox>
+  </div>
+
+  <button nbButton
+          fullWidth
+          status="primary"
+          size="large"
+          [disabled]="submitted || !form.valid"
+          [class.btn-pulse]="submitted">
+    Log In
+  </button>
+</form>
+
+
